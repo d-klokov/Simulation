@@ -77,7 +77,7 @@ public class BFSPathFinder implements PathFinder {
     @Override
     public Position findGoalPositionAround(Class<? extends Entity> goalClass, Position position) {
         for (Position current : getAvailableCellPositionsAround(position)) {
-            if (map.getEntityByPosition(current).getClass().isInstance(goalClass)) return current;
+            if (goalClass.isInstance(map.getEntityByPosition(current))) return current;
         }
         return null;
     }
