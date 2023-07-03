@@ -20,7 +20,7 @@ public class ConsoleRenderer {
     public static final String ANSI_GREEN = "\u001B[32m";
 
     public void render(Map map) {
-        Set<Position> positions = map.getEntities().keySet();
+        Set<Position> positions = map.getEntitiesPositions();
 
         System.out.print("\033\143");
         System.out.println(getTopAndBottomBorders());
@@ -30,7 +30,7 @@ public class ConsoleRenderer {
             for (int i = 0; i < map.getWidth(); i++) {
                 Position position = new Position(i, j);
                 if (positions.contains(position)) {
-                    line.append(getEntityView(map.getEntities().get(position).getColor()));
+                    line.append(getEntityView(map.getEntityByPosition(position).getColor()));
                 } else {
                     line.append(ANSI_WHITE_BACKGROUND + "   ");
                 }
