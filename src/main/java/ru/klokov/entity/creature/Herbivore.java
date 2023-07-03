@@ -4,44 +4,45 @@ import ru.klokov.Color;
 import ru.klokov.Position;
 import ru.klokov.Simulation;
 import ru.klokov.entity.Entity;
-import ru.klokov.pathfinder.BFSGrassPathFinder;
-import ru.klokov.pathfinder.GrassPathFinder;
+import ru.klokov.entity.object.Grass;
+import ru.klokov.pathfinder.BFSPathFinder;
+import ru.klokov.pathfinder.PathFinder;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Herbivore extends Creature {
-    private final GrassPathFinder pathFinder;
+    private final PathFinder pathFinder;
     private Queue<Position> pathToGrass;
     public Herbivore(Position position, int speed, int hp, Simulation simulation) {
         super(position, Color.PURPLE, speed, hp, simulation);
-        this.pathFinder = new BFSGrassPathFinder(super.getMap());
+        this.pathFinder = new BFSPathFinder(super.getMap());
         this.pathToGrass = new LinkedList<>();
     }
 
     @Override
     public void makeMove() {
-        if (super.stillAlive()) {
+        if (super.getMap().creatureStillAlive(this)) {
             for (int i = 0; i < this.getSpeed(); i++) {
-                Position grassPosition = pathFinder.findGrassPositionAround(this.getPosition());
+                Position grassPosition = pathFinder.findGoalPositionAround(Grass.class, this.getPosition());
                 if (grassPosition != null) {
-                    super.getMap().getEntities().remove(grassPosition);
+                    super.getMap().removeEntity(grassPosition);
                     super.getSimulation().controlGrassQuantity();
                 } else {
                     if (pathToGrass.isEmpty()) {
-                        pathToGrass = pathFinder.createPathToGrass(this.getPosition());
+                        pathToGrass = pathFinder.createPath(Grass.class, this.getPosition());
                     }
 
                     Position stepToGrass = pathToGrass.poll();
                     Entity stepToGrassEntity = super.getMap().getEntityByPosition(stepToGrass);
 
                     if (stepToGrassEntity instanceof Creature) {
-                        pathToGrass = pathFinder.createPathToGrass(stepToGrass);
+                        pathToGrass = pathFinder.createPath(Grass.class, stepToGrass);
                         stepToGrass = pathToGrass.poll();
                     }
 
-                    super.getMap().getEntities().put(stepToGrass, this);
-                    super.getMap().getEntities().remove(this.getPosition());
+                    super.getMap().addEntity(stepToGrass, this);
+                    super.getMap().removeEntity(this.getPosition());
                     this.setPosition(stepToGrass);
                 }
 

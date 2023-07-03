@@ -19,10 +19,6 @@ public abstract class Creature extends Entity {
 
     public abstract void makeMove();
 
-    public boolean stillAlive() {
-        return this.simulation.getMap().getEntities().containsValue(this);
-    }
-
     public int getSpeed() {
         return speed;
     }

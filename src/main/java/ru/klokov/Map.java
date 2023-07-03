@@ -8,6 +8,7 @@ import ru.klokov.entity.object.Grass;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class Map {
     private final int width;
@@ -23,9 +24,13 @@ public class Map {
     public void addEntity(Position position, Entity entity) {
         this.entities.put(position, entity);
     }
+    public void removeEntity(Position position) { this.entities.remove(position); }
     public Entity getEntityByPosition(Position position) {
-        return entities.get(position);
+        return this.entities.get(position);
     }
+    public boolean creatureStillAlive(Creature creature) { return this.entities.containsValue(creature); }
+    public boolean cellIsEmpty(Position position) { return !this.entities.containsKey(position); }
+    public Set<Position> getEntitiesPositions() { return this.entities.keySet(); }
 
     public int getWidth() {
         return width;
@@ -35,9 +40,6 @@ public class Map {
         return height;
     }
 
-    public java.util.Map<Position, Entity> getEntities() {
-        return entities;
-    }
     public List<Creature> getCreatures() {
         List<Creature> creatures = new ArrayList<>();
         for (Entity entity : entities.values()) {
@@ -45,22 +47,6 @@ public class Map {
         }
         return creatures;
     }
-
-//    public int getGrassQuantity() {
-//        List<Grass> grassList = new ArrayList<>();
-//        for (Entity entity : entities.values()) {
-//            if (entity instanceof Grass) grassList.add((Grass) entity);
-//        }
-//        return grassList.size();
-//    }
-//
-//    public int getHerbivoresQuantity() {
-//        List<Herbivore> herbivores = new ArrayList<>();
-//        for (Entity entity : entities.values()) {
-//            if (entity instanceof Herbivore) herbivores.add((Herbivore) entity);
-//        }
-//        return herbivores.size();
-//    }
 
     public <T> List<T> getEntitiesByType(Class<T> type) {
         List<T> entities = new ArrayList<>();

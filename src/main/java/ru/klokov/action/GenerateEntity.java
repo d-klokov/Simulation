@@ -19,7 +19,7 @@ public class GenerateEntity implements Action {
     @Override
     public void perform(Map map) {
         Random random = new Random();
-        Set<Position> entitiesOnMapPositions = map.getEntities().keySet();
+        Set<Position> entitiesOnMapPositions = map.getEntitiesPositions();
 
         for (int i = 0; i < quantity; i++) {
             Position position;
