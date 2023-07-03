@@ -46,19 +46,35 @@ public class Map {
         return creatures;
     }
 
-    public int getGrassQuantity() {
-        List<Grass> grassList = new ArrayList<>();
-        for (Entity entity : entities.values()) {
-            if (entity instanceof Grass) grassList.add((Grass) entity);
+//    public int getGrassQuantity() {
+//        List<Grass> grassList = new ArrayList<>();
+//        for (Entity entity : entities.values()) {
+//            if (entity instanceof Grass) grassList.add((Grass) entity);
+//        }
+//        return grassList.size();
+//    }
+//
+//    public int getHerbivoresQuantity() {
+//        List<Herbivore> herbivores = new ArrayList<>();
+//        for (Entity entity : entities.values()) {
+//            if (entity instanceof Herbivore) herbivores.add((Herbivore) entity);
+//        }
+//        return herbivores.size();
+//    }
+
+    public <T> List<T> getEntitiesByType(Class<T> type) {
+        List<T> entities = new ArrayList<>();
+        for (Entity entity : this.entities.values()) {
+            if (type.isInstance(entity)) entities.add(type.cast(entity));
         }
-        return grassList.size();
+        return entities;
+    }
+
+    public int getGrassQuantity() {
+        return getEntitiesByType(Grass.class).size();
     }
 
     public int getHerbivoresQuantity() {
-        List<Herbivore> herbivores = new ArrayList<>();
-        for (Entity entity : entities.values()) {
-            if (entity instanceof Herbivore) herbivores.add((Herbivore) entity);
-        }
-        return herbivores.size();
+        return getEntitiesByType(Herbivore.class).size();
     }
 }
