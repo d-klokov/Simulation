@@ -53,7 +53,7 @@ public class Simulation {
         this.initActions.add(new GenerateEntity(MAX_PREDATORS_QUANTITY,
                 new PredatorFactory(PREDATOR_SPEED, PREDATOR_HP, PREDATOR_ATTACK_POWER, this)));
 
-        initActions.forEach(action -> action.perform(this.map));
+        initActions.forEach(action -> action.perform(map));
 
         turnActions.add(new MoveCreatures());
     }
@@ -72,13 +72,13 @@ public class Simulation {
 
     public void startSimulation() {
         status = Status.RUNNING;
-        renderer.render(this.getMap());
+        renderer.render(map);
         while (!status.equals(Status.STOPPED)) {
             if (status.equals(Status.RUNNING)) {
                 nextTurn();
             }
             else if (status.equals(Status.PAUSED)) {
-                renderer.render(this.getMap());
+                renderer.render(map);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -86,7 +86,7 @@ public class Simulation {
                 }
             }
         }
-        renderer.render(this.getMap());
+        renderer.render(map);
     }
 
     public void pauseSimulation() {
@@ -100,13 +100,16 @@ public class Simulation {
     public Map getMap() {
         return map;
     }
+    public ConsoleRenderer getRenderer() {
+        return renderer;
+    }
 
     public int getTurnCounter() {
         return turnCounter;
     }
 
     public Status getStatus() {
-        return this.status;
+        return status;
     }
 
     public void stop() {
@@ -114,21 +117,17 @@ public class Simulation {
     }
 
     public void controlGrassQuantity() {
-        if (this.getMap().getGrassQuantity() == GRASS_LOAD_FACTOR) {
+        if (map.getGrassQuantity() == GRASS_LOAD_FACTOR) {
             new GenerateEntity(MAX_GRASS_QUANTITY - GRASS_LOAD_FACTOR,
-                    new GrassFactory()).perform(this.getMap());
+                    new GrassFactory()).perform(map);
         }
     }
 
     public void controlHerbivoresQuantity() {
-        if (this.getMap().getHerbivoresQuantity() == HERBIVORE_LOAD_FACTOR) {
+        if (map.getHerbivoresQuantity() == HERBIVORE_LOAD_FACTOR) {
             new GenerateEntity(MAX_HERBIVORES_QUANTITY - HERBIVORE_LOAD_FACTOR,
-                    new HerbivoreFactory(HERBIVORE_SPEED, HERBIVORE_HP, this)).perform(this.getMap());
+                    new HerbivoreFactory(HERBIVORE_SPEED, HERBIVORE_HP, this)).perform(map);
         }
-    }
-
-    public ConsoleRenderer getRenderer() {
-        return this.renderer;
     }
 
     public void setSpeed100() {

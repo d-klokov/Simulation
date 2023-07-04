@@ -22,23 +22,21 @@ public class Map {
     }
 
     public void addEntity(Position position, Entity entity) {
-        this.entities.put(position, entity);
+        entities.put(position, entity);
     }
-    public void removeEntity(Position position) { this.entities.remove(position); }
+    public void removeEntity(Position position) { entities.remove(position); }
     public Entity getEntityByPosition(Position position) {
-        return this.entities.get(position);
+        return entities.get(position);
     }
-    public boolean creatureStillAlive(Creature creature) { return this.entities.containsValue(creature); }
-    public boolean cellIsEmpty(Position position) { return !this.entities.containsKey(position); }
-    public Set<Position> getEntitiesPositions() { return this.entities.keySet(); }
+    public boolean creatureStillAlive(Creature creature) { return entities.containsValue(creature); }
+    public boolean cellIsEmpty(Position position) { return !entities.containsKey(position); }
+    public Set<Position> getEntitiesPositions() { return entities.keySet(); }
 
     public int getWidth() {
         return width;
     }
 
-    public int getHeight() {
-        return height;
-    }
+    public int getHeight() { return height; }
 
     public List<Creature> getCreatures() {
         List<Creature> creatures = new ArrayList<>();
